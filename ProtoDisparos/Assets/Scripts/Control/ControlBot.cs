@@ -5,34 +5,19 @@ using UnityEngine;
 public class ControlBot : MonoBehaviour
 {
     private int hp;
-    public GameObject yo;
+    private bool Dead => hp <= 0;
 
-    void Start()
+    void Start() => hp = 100;
+    
+    public void Damage(bool headshot)
     {
-        hp = 100;
-    }
-
-    public void recibirDaño()
-    {
-        hp = hp - 20;
-    }
-
-    public void headShot()
-    {
-        hp = hp - 60;
-    }
-
-    private void Update()
-    {
-        if (hp <= 0)
+        if (Dead) return;
+        else hp -= headshot ? 60 : 20;
+        
+        if (Dead)
         {
-            desaparecer();
+            FindObjectOfType<ControlGanar>().cont++;
+            Destroy(gameObject);
         }
-    }
-
-    private void desaparecer()
-    {
-        Destroy(yo);
-        GameObject.Find("LVL MGR").GetComponent<ControlGanar>().cont++;
     }
 }
